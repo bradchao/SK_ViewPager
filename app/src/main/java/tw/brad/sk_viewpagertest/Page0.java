@@ -21,6 +21,9 @@ public class Page0 extends Fragment {
                     container, false);
         }
 
+//        MainActivity activity =
+//                (MainActivity) getActivity();
+
         return mainView;
     }
 }

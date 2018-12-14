@@ -1,5 +1,7 @@
 package tw.brad.sk_viewpagertest;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
@@ -22,6 +25,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = getIntent();
+        Uri uri = intent.getData();
+        if (uri != null) {
+            String value1 = uri.getQueryParameter("key1");
+            String value2 = uri.getQueryParameter("key2");
+            Log.v("brad", "key1 = " + value1);
+            Log.v("brad", "key2 = " + value2);
+        }
+
+
         viewPager = findViewById(R.id.viewPager);
         fmgr = getSupportFragmentManager();
 
@@ -30,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         pages[2] = new Page2();
         pages[3] = new Page3();
         pages[4] = new Page4();
+
+        initActionBar();
 
         MyAdapter myAdapter = new MyAdapter(fmgr);
         viewPager.setAdapter(myAdapter);
@@ -42,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(1);
                 }else if (position == 4){
                     viewPager.setCurrentItem(3);
+                }else{
+                    actionBar.setSelectedNavigationItem(position-1);
                 }
             }
         });
 
         viewPager.setCurrentItem(1);
-        initActionBar();
+
     }
 
     private void initActionBar(){
@@ -72,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
+            viewPager.setCurrentItem(tab.getPosition()+1);
         }
 
         @Override
